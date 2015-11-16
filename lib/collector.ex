@@ -10,11 +10,11 @@ defmodule Collector do
   def retrive_result(pid), do: GenServer.call(pid, :get)
 
   # GenServer callbacks
-  defp handle_cast({:setup, controller_pid, total_count}, _state) do
+  def handle_cast({:setup, controller_pid, total_count}, _state) do
     {:noreply, {controller_pid, total_count, []}}
   end
 
-  defp handle_cast({:add, {worker_pid, result}}, {controller_pid, total_count, results}) do
+  def handle_cast({:add, {worker_pid, result}}, {controller_pid, total_count, results}) do
     #NOTE kill worker first to prevent going over limit
     Process.exit(worker_pid, :kill)
     ParallelController.worker_finished(controller_pid)
@@ -24,7 +24,7 @@ defmodule Collector do
     {:noreply, {controller_pid, total_count, results ++ [result]}}
   end
 
-  defp handle_call(:get, _from, {controller_pid, total_count, results}) do
+  def handle_call(:get, _from, {controller_pid, total_count, results}) do
     {:reply, results, {controller_pid, total_count, results}}
   end
 

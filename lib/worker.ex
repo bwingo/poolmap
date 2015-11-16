@@ -16,23 +16,23 @@ defmodule WorkerCounter do
   def get(pid), do: GenServer.call(pid, :get)
 
   # GenServer callbacks
-  defp handle_cast({:setup, worker_limit}, _state) do
+  def handle_cast({:setup, worker_limit}, _state) do
     {:noreply, {worker_limit, 0}}
   end
 
-  defp handle_cast(:remove, {worker_limit, running_workers}) do
+  def handle_cast(:remove, {worker_limit, running_workers}) do
     {:noreply, {worker_limit, running_workers - 1}}
   end
 
-  defp handle_cast({:set, new_limit}, {_worker_limit, running_workers}) do
+  def handle_cast({:set, new_limit}, {_worker_limit, running_workers}) do
     {:noreply, {new_limit, running_workers}}
   end
 
-  defp handle_call(:get, _from, worker_data) do
+  def handle_call(:get, _from, worker_data) do
     {:reply, worker_data, worker_data}
   end
 
-  defp handle_call(:add, _from, {worker_limit, running_workers}) do
+  def handle_call(:add, _from, {worker_limit, running_workers}) do
     if running_workers >= worker_limit do
       {:reply, :limit_reached, {worker_limit, running_workers}}
     else
