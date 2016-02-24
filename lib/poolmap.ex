@@ -1,6 +1,8 @@
 defmodule Poolmap do
-  def pmap(collection, function), do: pmap(collection, function, :unlimited)
-  def pmap(collection, function, :unlimited) do
+  @doc """
+  pmap/2 maps over a collection and starts a process for each item and runs a funcion on/with the item.
+  """
+  def pmap(collection, function) do
     me = self
     Enum.map(collection, fn (elem) ->
       spawn_link fn -> (send me, { self, function.(elem) }) end
@@ -10,6 +12,10 @@ defmodule Poolmap do
     end)
   end
 
+  @doc """
+  pmap/3 maps over a collection and starts a process for each item and runs a funcion on/with the item.
+  At any one point there will only be a limited number of processes working specified by an integer in the limit.
+  """
   def pmap(collection, function, limit) do
     {:ok, controller_pid} = ParallelController.new
     ParallelController.setup(controller_pid, collection, function, limit)
