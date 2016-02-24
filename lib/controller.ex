@@ -10,7 +10,7 @@ defmodule ParallelController do
 
   def worker_finished(pid), do: GenServer.cast(pid, :worker_finished)
 
-  def all_work_done(pid), do: Genserver.cast(pid, :all_done)
+  def all_work_done(pid), do: GenServer.cast(pid, :all_done)
 
   def get_results(pid), do: GenServer.call(pid, :get)
 
