@@ -2,16 +2,16 @@ defmodule WorkerCounter do
   use GenServer
 
   # API
-  def new, do: GenServer.start_link(__MODULE__)
+  def new(limit), do: GenServer.start_link(__MODULE__, {limit, 0})
 
   def setup(pid, limit), do: GenServer.cast(pid, {:setup, limit})
 
   def worker_started(pid), do: GenServer.call(pid, :add)
 
-  def worker_finished(pid), do: GenServer.cast(pid, :remove)
+  def remove_worker(pid), do: GenServer.cast(pid, :remove)
 
   #NOTE set_limit doesn't handle if current workers are over new limit.
-  def set_limit(pid, new_limit), do: GenServer.call(pid, {:set, new_limit})
+  def set_limit(pid, new_limit), do: GenServer.cast(pid, {:set, new_limit})
 
   def get(pid), do: GenServer.call(pid, :get)
 
