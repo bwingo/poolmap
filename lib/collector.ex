@@ -1,7 +1,7 @@
 defmodule Collector do
   use GenServer
 
-  def new, do: GenServer.start_link(__MODULE__)
+  def new(controller_pid), do: GenServer.start_link(__MODULE__, {controller_pid, 0, []})
   
   def setup(pid, controller_pid, total_count), do: GenServer.cast(pid, {:setup, controller_pid, total_count})
 
