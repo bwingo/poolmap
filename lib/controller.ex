@@ -40,7 +40,7 @@ defmodule ParallelController do
   end
 
   def handle_call(:get, _from, {collection, function, collector_pid, worker_counter_pid, done?}) do
-    no_workers = WorkerCounter.get(worker_counter_pid) == 0
+    no_workers = WorkerCounter.get(worker_counter_pid) |> elem(1) == 0
     if done? && no_workers do
       {:reply, collector_pid, {collection, function, collector_pid, worker_counter_pid, done?}}
     else
