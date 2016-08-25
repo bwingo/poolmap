@@ -20,7 +20,7 @@ defmodule Poolmap do
     {:ok, controller_pid} = ParallelController.new
     ParallelController.setup(controller_pid, collection, function, limit)
     results = get_results(controller_pid)
-    Process.exit(controller_pid, :kill) #killing the controller should kill all the other processes
+    Process.exit(controller_pid, :normal) #killing the controller should kill all the other processes
     results
   end
 
